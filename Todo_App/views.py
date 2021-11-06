@@ -15,7 +15,7 @@ def index(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def todo_detail(request,pk):
+def todo_details(request,pk):
     todo = TodoNote.objects.get(id=pk)
     serializer = TodoSerializer(todo,many = False)
     return Response(serializer.data)
