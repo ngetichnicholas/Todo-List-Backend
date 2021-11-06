@@ -27,3 +27,19 @@ def add_todo(request):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['POST'])
+def update_todo(request,pk):
+    todo = TodoNote.objects.get(id=pk)
+    serializer = TodoSerializer(instance= todo, data = request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_todo  (request,pk):
+    todo = TodoNote.objects.get(id=pk)
+    todo.delete()
+
+    return Response("Todo deleted successfully")
