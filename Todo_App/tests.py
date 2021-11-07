@@ -86,3 +86,43 @@ class GetSingleTodoTest(TestCase):
         response = client.get(
             reverse('todo_details', kwargs={'pk': 30}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+class CreateNewTodoTest(TestCase):
+    """ Test module for inserting a new todo """
+
+    def setUp(self):
+        
+        self.valid_payload =     {
+        "id": 1,
+        "title": "Test",
+        "note": "Create test Note",
+        "date_created": "2021-11-07T20:52:26.727495+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        "complete": False,
+        "category": 1
+    }
+        self.invalid_payload = {
+        "id": 1,
+        "title": "",
+        "note": "Create test Note",
+        "date_created": "2021-11-07T20:52:26.727495+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        "complete": False,
+        "category": 1
+    }
+
+    def test_create_valid_todo(self):
+        response = client.post(
+            reverse('add_todo'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_todo(self):
+        response = client.post(
+            reverse('add_todo'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
