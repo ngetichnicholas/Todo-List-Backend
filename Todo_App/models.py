@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
+
 
 # Create your models here.
 class Category(models.Model):
@@ -16,7 +18,7 @@ class TodoNote(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_due = models.DateTimeField()
     complete = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, default="general")
+    category = models.ForeignKey(Category,on_delete=CASCADE, default="general")
     
     class Meta:
         ordering = ["-date_created"]
