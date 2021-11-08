@@ -87,45 +87,91 @@ class GetSingleTodoTest(TestCase):
             reverse('todo_details', kwargs={'pk': 30}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
-# class CreateNewTodoTest(TestCase):
-#     """ Test module for inserting a new todo """
+class CreateNewTodoTest(TestCase):
+    """ Test module for inserting a new todo """
 
-#     def setUp(self):
+    def setUp(self):
         
-#         self.valid_payload =     {
-#         "id": 1,
-#         "title": "Test",
-#         "note": "Create test Note",
-#         "date_created": "2021-11-07T20:52:26.727495+03:00",
-#         "date_due": "2021-11-07T20:51:48+03:00",
-#         "complete": False,
-#         "category": 1
-#     }
-#         self.invalid_payload = {
-#         "id": 1,
-#         "title": "",
-#         "note": "Create test Note",
-#         "date_created": "2021-11-07T20:52:26.727495+03:00",
-#         "date_due": "2021-11-07T20:51:48+03:00",
-#         "complete": False,
-#         "category": 1
-#     }
+        self.valid_payload =     {
+        "id": 3,
+        "title": "Test",
+        "note": "Create test Note",
+        "date_created": "2021-11-08T00:32:24.430290+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        'complete': True,
+        "category": 1
+    }
+        self.invalid_payload = {
+        "id": 1,
+        "title": "",
+        "note": "Create test Note",
+        "date_created": "2021-11-07T20:52:26.727495+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        "complete": False,
+        "category": 1
+    }
 
-#     def test_create_valid_todo(self):
-#         response = client.post(
-#             reverse('add_todo'),
-#             data=json.dumps(self.valid_payload),
-#             content_type='application/json'
-#         )
-#         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_create_valid_todo(self):
+        response = client.post(
+            reverse('add_todo'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-#     def test_create_invalid_todo(self):
-#         response = client.post(
-#             reverse('add_todo'),
-#             data=json.dumps(self.invalid_payload),
-#             content_type='application/json'
-#         )
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_create_invalid_todo(self):
+        response = client.post(
+            reverse('add_todo'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+class UpdateSingleTodoTest(TestCase):
+    """ Test module for upating existing todo """
+
+    def setUp(self):
+        test_category=Category.objects.create(name='Testing')
+        
+        self.back_end=TodoNote.objects.create(
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+        
+        self.new_test=TodoNote.objects.create(
+            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+        
+        self.valid_payload =     {
+        "id": 3,
+        "title": "Test",
+        "note": "Create test Note",
+        "date_created": "2021-11-08T00:32:24.430290+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        'complete': True,
+        "category": 1
+    }
+        self.invalid_payload = {
+        "id": 1,
+        "title": "",
+        "note": "Create test Note",
+        "date_created": "2021-11-07T20:52:26.727495+03:00",
+        "date_due": "2021-11-07T20:51:48+03:00",
+        "complete": False,
+        "category": 1
+    }
+
+    def test_valid_todo_update(self):
+        response = client.put(
+            reverse('update_todo', kwargs={'pk': self.new_test.pk}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_todo_update(self):
+        response = client.put(
+            reverse('update_todo', kwargs={'pk': self.new_test.pk}),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class DeleteSingleTodoTest(TestCase):
     """ Test module for deleting an existing Todo record """
