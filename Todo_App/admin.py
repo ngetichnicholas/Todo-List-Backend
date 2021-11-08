@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import TodoNote,Category
+from .models import TodoNote
 
 # Register your models here.
 admin.site.register(TodoNote)
-admin.site.register(Category)

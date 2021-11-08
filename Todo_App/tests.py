@@ -1,5 +1,5 @@
 from django.test import TestCase,Client
-from .models import TodoNote,Category
+from .models import TodoNote
 import json
 from rest_framework import status
 from django.urls import reverse
@@ -14,40 +14,33 @@ class TodoNoteTest(TestCase):
 
     def setUp(self):
         
-        test_category=Category.objects.create(name='Testing')
-        
         TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         TodoNote.objects.create(
-            title='Front end', note='Create VueJS Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=True,category =test_category)
+            title='Front end', note='Create VueJS Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
 
     def test_todo(self):
         todo_note = TodoNote.objects.get(title='Back end')
         note = TodoNote.objects.get(title='Front end')
-        category = Category.objects.get(name='Testing')
         self.assertEqual(
             todo_note.title, "Back end")
         
         self.assertEqual(
             note.title, "Front end")
         
-        self.assertEqual(
-            category.name, 'Testing'
-        )
         
 class GetAllTodoTest(TestCase):
     """ Test module for GET all Todo API """
 
     def setUp(self):
-        test_category=Category.objects.create(name='Testing')
         
         TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         
         TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         TodoNote.objects.create(
-            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=True,category =test_category)
+            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
 
 
     def test_get_all_todo(self):
@@ -64,15 +57,14 @@ class GetSingleTodoTest(TestCase):
     """ Test module for GET single Todo API """
 
     def setUp(self):
-        test_category=Category.objects.create(name='Testing')
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         
         self.new_test=TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         self.hello_test=TodoNote.objects.create(
-            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=True,category =test_category)
+            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
 
     def test_get_valid_single_todo(self):
         response = client.get(
@@ -98,8 +90,8 @@ class CreateNewTodoTest(TestCase):
         "note": "Create test Note",
         "date_created": "2021-11-08T00:32:24.430290+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        'complete': True,
-        "category": 1
+        'complete': 'Yes',
+        "category": 'General'
     }
         self.invalid_payload = {
         "id": 1,
@@ -107,8 +99,8 @@ class CreateNewTodoTest(TestCase):
         "note": "Create test Note",
         "date_created": "2021-11-07T20:52:26.727495+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        "complete": False,
-        "category": 1
+        "complete": 'No',
+        "category": 'General'
     }
 
     def test_create_valid_todo(self):
@@ -131,13 +123,12 @@ class UpdateSingleTodoTest(TestCase):
     """ Test module for upating existing todo """
 
     def setUp(self):
-        test_category=Category.objects.create(name='Testing')
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         
         self.new_test=TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         
         self.valid_payload =     {
         "id": 3,
@@ -145,8 +136,8 @@ class UpdateSingleTodoTest(TestCase):
         "note": "Create test Note",
         "date_created": "2021-11-08T00:32:24.430290+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        'complete': True,
-        "category": 1
+        'complete': 'Yes',
+        "category": 'General'
     }
         self.invalid_payload = {
         "id": 1,
@@ -154,8 +145,8 @@ class UpdateSingleTodoTest(TestCase):
         "note": "Create test Note",
         "date_created": "2021-11-07T20:52:26.727495+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        "complete": False,
-        "category": 1
+        "complete": 'Yes',
+        "category": 'General'
     }
 
     def test_valid_todo_update(self):
@@ -177,10 +168,9 @@ class DeleteSingleTodoTest(TestCase):
     """ Test module for deleting an existing Todo record """
 
     def setUp(self):
-        test_category=Category.objects.create(name='Testing')
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete=False,category=test_category)
+            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
 
     def test_valid_delete_todo(self):
         response = client.delete(
