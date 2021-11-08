@@ -45,7 +45,11 @@ def update_todo(request,pk):
 
 @api_view(['DELETE'])
 def delete_todo  (request,pk):
-    todo = TodoNote.objects.get(id=pk)
+    try:
+        todo = TodoNote.objects.get(id=pk)
+    except TodoNote.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
     todo.delete()
 
-    return Response("Todo deleted successfully")
+    return Response(status=status.HTTP_204_NO_CONTENT)
