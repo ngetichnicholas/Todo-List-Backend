@@ -45,7 +45,7 @@ class GetAllTodoTest(TestCase):
 
     def test_get_all_todo(self):
         # get API response
-        response = client.get(reverse('index'))
+        response = client.get(reverse('todo_list'))
         # get data from db
         todo = TodoNote.objects.all()
         serializer = TodoSerializer(todo, many=True)

@@ -11,6 +11,18 @@ from .models import TodoNote
 # Create your views here.
 @api_view(['GET'])
 def index(request):
+    api_endpoints = {
+        'List': '/todo_list',
+        'Todo Details': '/todo_details/<int:pk>/',
+        'Create': '/add-todo/',
+        'Update': '/update_todo/<int:pk>/',
+        'Delete': '/delete_todo/<int:pk>/',
+        
+    }
+    return Response(api_endpoints)
+
+@api_view(['GET'])
+def todo_list(request):
     todo = TodoNote.objects.all()
     serializer = TodoSerializer(todo,many = True)
     return Response(serializer.data)
