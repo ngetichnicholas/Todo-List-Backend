@@ -9,10 +9,13 @@ from .forms import TodoForm
 
 def index(request):
     current_user = request.user
-    todos = TodoNote.objects.all()
+    complete_todos = TodoNote.objects.filter(complete='Yes').all()
+    incomplete_todos =TodoNote.objects.filter(complete='No').all()
 
     context = {
-        'todos': todos
+        'complete_todos': complete_todos,
+        'incomplete_todos': incomplete_todos
+
     }
     return render(request, 'index.html', context)
 
@@ -25,7 +28,7 @@ def add_todo(request):
             todo.save()
             
             messages.success(request, f'New todo added!')
-            return redirect('index')
+            return redirect('todo_app:index')
 
     else:
         add_todo_form = TodoForm()
@@ -46,7 +49,7 @@ def update_todo(request, todo_id):
         if update_todo_form.is_valid():
             update_todo_form.save()
             messages.success(request, f'Todo updated!')
-            return redirect('index')
+            return redirect('todo_app:index')
     else:
         update_todo_form = TodoForm(instance=todo)
     context = {
@@ -61,7 +64,7 @@ def delete_todo(request, todo_id):
     if todo:
         todo.delete_todo()
         messages.success(request, f'Todo deleted!')
-    return redirect('index')
+    return redirect('todo_app:index')
 
 def search(request):
   if 'todo' in request.GET and request.GET["todo"]:

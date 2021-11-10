@@ -28,3 +28,13 @@ class TodoNote(models.Model):
         
     def __str__(self):
         return self.title
+    
+    def save_todo(self):
+        self.save()
+
+    def delete_todo(self):
+        self.delete()
+        
+    @classmethod
+    def search_todos(cls, todo):
+        return cls.objects.filter(title__icontains=todo).all()
