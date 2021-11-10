@@ -1,73 +1,76 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from rest_framework import status
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-from .serializers import TodoSerializer
-from .models import TodoNote
+from api.models import TodoNote
+from .forms import TodoForm
 
 # Create your views here.
-@api_view(['GET'])
+
+
 def index(request):
-    api_endpoints = {
-        'List': '/todo_list',
-        'Todo Details': '/todo_details/<int:pk>/',
-        'Create': '/add-todo/',
-        'Update': '/update_todo/<int:pk>/',
-        'Delete': '/delete_todo/<int:pk>/',
-        
+    current_user = request.user
+    todos = TodoNote.objects.all()
+
+    context = {
+        'todos': todos
     }
-    return Response(api_endpoints)
+    return render(request, 'index.html', context)
 
-@api_view(['GET'])
-def todo_list(request):
-    todo = TodoNote.objects.all()
-    serializer = TodoSerializer(todo,many = True)
-    return Response(serializer.data)
 
-@api_view(['GET'])
-def todo_details(request,pk):
-    
-    try:
-        todo = TodoNote.objects.get(pk=pk)
-    except TodoNote.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = TodoSerializer(todo)
-    return Response(serializer.data)
-
-@api_view(['POST'])
 def add_todo(request):
-    serializer = TodoSerializer(data = request.data)
+    if request.method == 'POST':
+        add_todo_form = TodoForm(request.POST)
+        if add_todo_form.is_valid():
+            todo = add_todo_form.save(commit=False)
+            todo.save()
+            
+            messages.success(request, f'New todo added!')
+            return redirect('index')
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        add_todo_form = TodoForm()
 
-@api_view(['PUT'])
-def update_todo(request,pk):
-    try:
-        todo = TodoNote.objects.get(pk=pk)
-    except TodoNote.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = TodoSerializer(todo, data = request.data)
+    return render(request, 'add_todo.html', {'add_todo_form': add_todo_form})
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def todo_details(request, todo_id):
+    todo = TodoNote.objects.get(pk=todo_id)
 
-@api_view(['DELETE'])
-def delete_todo  (request,pk):
-    try:
-        todo = TodoNote.objects.get(id=pk)
-    except TodoNote.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    todo.delete()
+    return render(request, 'todo_page.html', {'todo': todo})
 
-    return Response(status=status.HTTP_204_NO_CONTENT)
+
+def update_todo(request, todo_id):
+    todo = TodoNote.objects.get(pk=todo_id)
+
+    if request.method == 'POST':
+        update_todo_form = TodoForm(request.POST, instance=todo)
+        if update_todo_form.is_valid():
+            update_todo_form.save()
+            messages.success(request, f'Todo updated!')
+            return redirect('index')
+    else:
+        update_todo_form = TodoForm(instance=todo)
+    context = {
+        "update_todo_form": update_todo_form,
+        "todo": todo
+    }
+    return render(request, 'update_todo.html', context)
+
+
+def delete_todo(request, todo_id):
+    todo = TodoNote.objects.get(pk=todo_id)
+    if todo:
+        todo.delete_todo()
+        messages.success(request, f'Todo deleted!')
+    return redirect('index')
+
+def search(request):
+  if 'todo' in request.GET and request.GET["todo"]:
+    search_term = request.GET.get("todo")
+    searched_todos = TodoNote.search_todos(search_term)
+    message = f"{search_term}"
+
+    return render(request,'search.html', {"message":message,"todos":searched_todos})
+
+  else:
+    message = "You haven't searched for any term"
+    return render(request,'search.html',{"message":message})
