@@ -14,7 +14,7 @@ def index(request):
     api_endpoints = {
         'List': '/todo_list',
         'Todo Details': '/todo_details/<int:pk>/',
-        'Create': '/add-todo/',
+        'Create': '/add_todo',
         'Update': '/update_todo/<int:pk>/',
         'Delete': '/delete_todo/<int:pk>/',
         
