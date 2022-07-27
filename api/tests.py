@@ -88,10 +88,10 @@ class CreateNewTodoTest(TestCase):
         "id": 3,
         "title": "Test",
         "note": "Create test Note",
-        "date_created": "2021-11-08T00:32:24.430290+03:00",
-        "date_due": "2021-11-07T20:51:48+03:00",
-        'complete': 'Yes',
-        "category": 'General'
+        "date_created": "2021-11-11",
+        "date_due": "2021-11-11",
+        "complete": "Yes",
+        "category": "General"
     }
         self.invalid_payload = {
         "id": 1,
@@ -131,13 +131,13 @@ class UpdateSingleTodoTest(TestCase):
             title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
         
         self.valid_payload =     {
-        "id": 3,
+        "id": 1,
         "title": "Test",
         "note": "Create test Note",
-        "date_created": "2021-11-08T00:32:24.430290+03:00",
-        "date_due": "2021-11-07T20:51:48+03:00",
-        'complete': 'Yes',
-        "category": 'General'
+        "date_created": "2021-11-11",
+        "date_due": "2021-11-11",
+        "complete": "Yes",
+        "category": "General"
     }
         self.invalid_payload = {
         "id": 1,
