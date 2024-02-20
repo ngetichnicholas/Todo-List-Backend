@@ -7,8 +7,6 @@ django-urls==1.1.3
 djangorestframework==3.12.4
 gunicorn==19.0.0
 Pillow==8.2.0
-psycopg2==2.8.6
-psycopg2-binary>=2.8
 pytest-django==4.5.2
 python-decouple==3.1
 whitenoise==5.2.0

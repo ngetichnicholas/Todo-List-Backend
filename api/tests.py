@@ -174,7 +174,7 @@ class DeleteSingleTodoTest(TestCase):
 
     def test_valid_delete_todo(self):
         response = client.delete(
-            reverse('delete_todo', kwargs={'pk': 3}))
+            reverse('delete_todo', kwargs={'pk': self.back_end.id}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_invalid_delete_todo(self):
