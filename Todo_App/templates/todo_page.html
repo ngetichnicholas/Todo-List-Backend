@@ -23,12 +23,12 @@
       {% endif %}
       <div class="card">
         <h4 class="text-info text-center">{{todo.title}}</h4>
-        <p class="text-center">{{todo.note}}</p>
+        <p class="text-center">{{todo.description}}</p>
         <h4 class="text-center text-info">Details</h4>
         <p class="text-center">Date created: {{todo.date_created|date}}</p>
         <p class="text-center">Due date: {{todo.date_due|date}}</p>
         <p class="text-center">Category: {{todo.category}}</p>
-        <p class="text-center">Task completed? <span class="text-primary">{{todo.complete}}</span></p>
+        <p class="text-center">Task completed? <span class="text-primary">{{todo.status}}</span></p>
       </div>
       <div class="text-center">
         <a href="{% url 'todo_app:update_todo' todo.id %}"><button class="btn btn-success">Update</button></a>

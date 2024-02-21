@@ -15,9 +15,9 @@ class TodoNoteTest(TestCase):
     def setUp(self):
         
         TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='Back end', description='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         TodoNote.objects.create(
-            title='Front end', note='Create VueJS Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
+            title='Front end', description='Create VueJS Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Completed',category ='General')
 
     def test_todo(self):
         todo_note = TodoNote.objects.get(title='Back end')
@@ -35,12 +35,12 @@ class GetAllTodoTest(TestCase):
     def setUp(self):
         
         TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='Back end', description='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         
         TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='New Test', description='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         TodoNote.objects.create(
-            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
+            title='Hello Test', description='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Completed',category ='General')
 
 
     def test_get_all_todo(self):
@@ -59,12 +59,12 @@ class GetSingleTodoTest(TestCase):
     def setUp(self):
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='Back end', description='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         
         self.new_test=TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='New Test', description='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         self.hello_test=TodoNote.objects.create(
-            title='Hello Test', note='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='Yes',category ='General')
+            title='Hello Test', description='Hello world test case', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Completed',category ='General')
 
     def test_get_valid_single_todo(self):
         response = client.get(
@@ -87,19 +87,19 @@ class CreateNewTodoTest(TestCase):
         self.valid_payload =     {
         "id": 3,
         "title": "Test",
-        "note": "Create test Note",
+        "description": "Create test Note",
         "date_created": "2021-11-11",
         "date_due": "2021-11-11",
-        "complete": "Yes",
+        "status": "Completed",
         "category": "General"
     }
         self.invalid_payload = {
         "id": 1,
         "title": "",
-        "note": "Create test Note",
+        "description": "Create test Note",
         "date_created": "2021-11-07T20:52:26.727495+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        "complete": 'No',
+        "status": 'Pending',
         "category": 'General'
     }
 
@@ -125,27 +125,27 @@ class UpdateSingleTodoTest(TestCase):
     def setUp(self):
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='Back end', description='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         
         self.new_test=TodoNote.objects.create(
-            title='New Test', note='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='New Test', description='New testing note', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
         
         self.valid_payload =     {
         "id": 1,
         "title": "Test",
-        "note": "Create test Note",
+        "description": "Create test Note",
         "date_created": "2021-11-11",
         "date_due": "2021-11-11",
-        "complete": "Yes",
+        "status": "Completed",
         "category": "General"
     }
         self.invalid_payload = {
         "id": 1,
         "title": "",
-        "note": "Create test Note",
+        "description": "Create test Note",
         "date_created": "2021-11-07T20:52:26.727495+03:00",
         "date_due": "2021-11-07T20:51:48+03:00",
-        "complete": 'Yes',
+        "status": 'Completed',
         "category": 'General'
     }
 
@@ -170,7 +170,7 @@ class DeleteSingleTodoTest(TestCase):
     def setUp(self):
         
         self.back_end=TodoNote.objects.create(
-            title='Back end', note='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',complete='No',category='General')
+            title='Back end', description='Create Django Application', date_created='2021-11-07T20:52:26.727495+03:00',date_due='2021-11-07T20:52:26.727495+03:00',status='Pending',category='General')
 
     def test_valid_delete_todo(self):
         response = client.delete(

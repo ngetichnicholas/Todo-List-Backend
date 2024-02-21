@@ -9,8 +9,8 @@ from .forms import TodoForm
 
 def index(request):
     current_user = request.user
-    complete_todos = TodoNote.objects.filter(complete='Yes').all()
-    incomplete_todos =TodoNote.objects.filter(complete='No').all()
+    complete_todos = TodoNote.objects.filter(status='Complete').all()
+    incomplete_todos =TodoNote.objects.filter(status='Pending').all()
 
     context = {
         'complete_todos': complete_todos,
