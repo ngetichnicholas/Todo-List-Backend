@@ -154,3 +154,4 @@ cython_debug/
 /data
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+*.zip

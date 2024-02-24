@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Todo_App',
     'bootstrap4',
     'rest_framework',
     'corsheaders',
